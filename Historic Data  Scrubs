@@ -1,0 +1,23 @@
+//I had a situation where a u_field (month-year) was mispelled,
+* although I fixed the actual mistake in the code I needed to scrub the history. 
+* this code goes through and perfoms the scrub. 
+//
+
+var query = 'u_closed_monthSTARTSWITHFebraury'; 
+var count = 0; 
+
+var gr = new GlideRecord('sn_customerservice_case'); 
+gr.addEncodedQuery(query); 
+gr.query(); 
+
+while (gr.next()) { 
+gr.autoSysFields(false); // Do not update sys_updated_by, sys_updated_on, sys_mod_count, sys_created_by, sys_created_on 
+gr.setWorkflow(false); // Do not run any other business rules 
+var str = gr.u_closed_month; 
+var result = str.replace("Febraury","February"); 
+gr.u_closed_month = result; 
+gs.print(gr.number+", "+result); 
+gr.update(); 
+count++; 
+} 
+gs.print(count);
