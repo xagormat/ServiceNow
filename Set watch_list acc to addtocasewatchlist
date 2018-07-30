@@ -1,0 +1,33 @@
+// code changed to 
+
+
+
+
+
+
+//Code Changed from 
+
+(function executeRule(current, previous /*null when async*/) {
+	
+	// Add your code here
+	// 	var watchlist = [];
+	// 	watchlist = current.watch_list.split(',');
+	var str1 = current.watch_list;
+	var gr = new GlideRecord("sys_user");
+	gr.addQuery("company",current.account);
+	gr.addQuery("u_add_to_case_watchlist",true);
+	gr.query();
+	while (gr.next()) {
+		var str2 = gr.sys_id;
+		if(!current.watch_list)
+			{
+			current.watch_list = gr.sys_id;
+		}
+		else if(str1.indexOf(str2) == -1)
+			{
+			current.watch_list = current.watch_list +','+ gr.sys_id;	
+		}
+		current.update();
+	}
+	
+})(current, previous);
